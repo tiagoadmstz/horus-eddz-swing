@@ -51,7 +51,7 @@ public class UserRestService extends AbstractRestService {
                 ModelSessaoUsuario.codigo
         );
         response.getBody().forEach(permission -> {
-            if (permissions.containsKey(permission)) permissions.get(permission).setVisible(true);
+            if (permissions.containsKey(permission)) permissions.get(permission).setEnabled(true);
         });
     }
 }
