@@ -145,7 +145,7 @@
         <Component class="javax.swing.JButton" name="btAdicionar">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/setaDireita.gif"/>
+              <Image iconType="3" name="/imagens/setaDireita.gif"/>
             </Property>
             <Property name="actionCommand" type="java.lang.String" value="adicionar"/>
           </Properties>
@@ -153,7 +153,7 @@
         <Component class="javax.swing.JButton" name="btRemover">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/setaEsquerda.gif"/>
+              <Image iconType="3" name="/imagens/setaEsquerda.gif"/>
             </Property>
             <Property name="actionCommand" type="java.lang.String" value="remover"/>
           </Properties>
@@ -161,7 +161,7 @@
         <Component class="javax.swing.JButton" name="btAddTodas">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/setaDireitaFinal.gif"/>
+              <Image iconType="3" name="/imagens/setaDireitaFinal.gif"/>
             </Property>
             <Property name="actionCommand" type="java.lang.String" value="adicionarTodas"/>
           </Properties>
@@ -169,7 +169,7 @@
         <Component class="javax.swing.JButton" name="btRemoverTodas">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/setaEsquerdaInicio.gif"/>
+              <Image iconType="3" name="/imagens/setaEsquerdaInicio.gif"/>
             </Property>
             <Property name="actionCommand" type="java.lang.String" value="removerTodas"/>
           </Properties>

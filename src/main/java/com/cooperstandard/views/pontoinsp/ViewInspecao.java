@@ -105,7 +105,7 @@ public class ViewInspecao extends javax.swing.JFrame {
 
         jMenuBar1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        MenuCadFicha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/icons8_administrative_tools_32px.png"))); // NOI18N
+        MenuCadFicha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icons8_administrative_tools_32px.png"))); // NOI18N
         MenuCadFicha.setText("Cadastro");
         MenuCadFicha.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
 
@@ -138,7 +138,7 @@ public class ViewInspecao extends javax.swing.JFrame {
 
         jMenuBar1.add(MenuCadFicha);
 
-        MenuEntradaDados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/icons8_document_32px.png"))); // NOI18N
+        MenuEntradaDados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icons8_document_32px.png"))); // NOI18N
         MenuEntradaDados.setText("Input de dado");
         MenuEntradaDados.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
 
@@ -153,7 +153,7 @@ public class ViewInspecao extends javax.swing.JFrame {
 
         jMenuBar1.add(MenuEntradaDados);
 
-        MenuAlteracaoDados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/icons8_edit_file_32px.png"))); // NOI18N
+        MenuAlteracaoDados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icons8_edit_file_32px.png"))); // NOI18N
         MenuAlteracaoDados.setText("Alteração");
         MenuAlteracaoDados.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
 
@@ -168,7 +168,7 @@ public class ViewInspecao extends javax.swing.JFrame {
 
         jMenuBar1.add(MenuAlteracaoDados);
 
-        MenuRelatorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/icons8_graph_32px.png"))); // NOI18N
+        MenuRelatorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icons8_graph_32px.png"))); // NOI18N
         MenuRelatorio.setText("Relatório");
         MenuRelatorio.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
 
@@ -182,7 +182,7 @@ public class ViewInspecao extends javax.swing.JFrame {
 
         jMenuBar1.add(MenuRelatorio);
 
-        MenuUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/icons8_user_32px.png"))); // NOI18N
+        MenuUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icons8_user_32px.png"))); // NOI18N
         MenuUsuario.setText("Usuário");
         MenuUsuario.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
 
@@ -197,7 +197,7 @@ public class ViewInspecao extends javax.swing.JFrame {
 
         jMenuBar1.add(MenuUsuario);
 
-        MenuSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/icons8_close_window_32px.png"))); // NOI18N
+        MenuSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/icons8_close_window_32px.png"))); // NOI18N
         MenuSair.setText("Sair");
         MenuSair.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         MenuSair.addMouseListener(new java.awt.event.MouseAdapter() {

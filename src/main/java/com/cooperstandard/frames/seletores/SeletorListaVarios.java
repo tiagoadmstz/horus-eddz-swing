@@ -85,16 +85,16 @@ public final class SeletorListaVarios extends ManipulaFrames {
         ));
         scTabelaDestOpcao.setViewportView(tbTabelaDestOpcao);
 
-        btAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/setaDireita.gif"))); // NOI18N
+        btAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/setaDireita.gif"))); // NOI18N
         btAdicionar.setActionCommand("adicionar");
 
-        btRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/setaEsquerda.gif"))); // NOI18N
+        btRemover.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/setaEsquerda.gif"))); // NOI18N
         btRemover.setActionCommand("remover");
 
-        btAddTodas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/setaDireitaFinal.gif"))); // NOI18N
+        btAddTodas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/setaDireitaFinal.gif"))); // NOI18N
         btAddTodas.setActionCommand("adicionarTodas");
 
-        btRemoverTodas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagens/setaEsquerdaInicio.gif"))); // NOI18N
+        btRemoverTodas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/setaEsquerdaInicio.gif"))); // NOI18N
         btRemoverTodas.setActionCommand("removerTodas");
 
         btConfirmar.setText("Confirmar");

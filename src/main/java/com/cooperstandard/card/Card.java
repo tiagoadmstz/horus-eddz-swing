@@ -240,7 +240,7 @@ public class Card extends javax.swing.JPanel {
         roundPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagensddz/icons8_us_dollar_circled_40px.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagensddz/icons8_us_dollar_circled_40px.png"))); // NOI18N
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 0, 51));
@@ -269,7 +269,7 @@ public class Card extends javax.swing.JPanel {
         roundPanel4.setBackground(new java.awt.Color(0, 0, 0));
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagensddz/icons8_weight_kg_40px.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagensddz/icons8_weight_kg_40px.png"))); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 0, 51));
@@ -298,7 +298,7 @@ public class Card extends javax.swing.JPanel {
         roundPanel3.setBackground(new java.awt.Color(0, 0, 0));
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/cooperstandard/imagensddz/icons8_speed_40px.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagensddz/icons8_speed_40px.png"))); // NOI18N
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N

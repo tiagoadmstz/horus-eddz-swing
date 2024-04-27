@@ -12,7 +12,7 @@
         <Menu class="javax.swing.JMenu" name="MenuCadFicha">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/icons8_administrative_tools_32px.png"/>
+              <Image iconType="3" name="/imagens/icons8_administrative_tools_32px.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Cadastro"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -52,7 +52,7 @@
         <Menu class="javax.swing.JMenu" name="MenuEntradaDados">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/icons8_document_32px.png"/>
+              <Image iconType="3" name="/imagens/icons8_document_32px.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Input de dado"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -74,7 +74,7 @@
         <Menu class="javax.swing.JMenu" name="MenuAlteracaoDados">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/icons8_edit_file_32px.png"/>
+              <Image iconType="3" name="/imagens/icons8_edit_file_32px.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Altera&#xe7;&#xe3;o"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -96,7 +96,7 @@
         <Menu class="javax.swing.JMenu" name="MenuRelatorio">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/icons8_graph_32px.png"/>
+              <Image iconType="3" name="/imagens/icons8_graph_32px.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Relat&#xf3;rio"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -117,7 +117,7 @@
         <Menu class="javax.swing.JMenu" name="MenuUsuario">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/icons8_user_32px.png"/>
+              <Image iconType="3" name="/imagens/icons8_user_32px.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Usu&#xe1;rio"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -139,7 +139,7 @@
         <Menu class="javax.swing.JMenu" name="MenuSair">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/com/cooperstandard/imagens/icons8_close_window_32px.png"/>
+              <Image iconType="3" name="/imagens/icons8_close_window_32px.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Sair"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
