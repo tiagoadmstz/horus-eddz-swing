@@ -1,0 +1,12 @@
+eddz:
+  datasource:
+    ficha-controle:
+      driver: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/FICHACONTROLE?allowPublicKeyRetrieval=true&useSSL=false
+      username: PROD
+      password: "@S3cr3T@"
+    supervisorio:
+      driver: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/SUPERVISORIO?allowPublicKeyRetrieval=true&useSSL=false
+      username: SUPERVISORIO
+      password: "@S3cr3T@"

@@ -1,0 +1,86 @@
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'java'
+    id 'application'
+}
+
+description = 'EDDZ'
+group = 'com.cooperstandard'
+version = '2.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'com.cooperstandard.EddzApplication'
+}
+
+build {
+    setArchivesBaseName('ficha-controle')
+    setVersion('2.0.0')
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    implementation 'commons-beanutils:commons-beanutils:1.8.2'
+    implementation 'commons-collections:commons-collections:3.2.1'
+    implementation 'commons-digester:commons-digester:2.1'
+    implementation 'commons-logging:commons-logging:1.1.1'
+    implementation 'org.codehaus.groovy:groovy-all:2.0.8'
+    implementation 'javax.mail:mail:1.4.7'
+    implementation 'org.apache.pdfbox:pdfbox:2.0.13'
+    implementation 'org.apache.poi:poi:3.6'
+    //web
+    implementation 'org.springframework:spring-core'
+    implementation 'org.springframework:spring-web'
+    //java swing
+    implementation 'org.netbeans.external:AbsoluteLayout:RELEASE122'
+    implementation 'org.jdesktop:beansbinding:1.2.1'
+    implementation 'com.kenai.nbpwr:org-jdesktop-animation-timing:1.0-201002281504'
+    //reports
+    implementation 'com.lowagie:itext:2.1.7'
+    implementation 'net.sf.jasperreports:jasperreports:5.6.1'
+    implementation 'net.sf.jasperreports:jasperreports-fonts:5.6.1'
+    implementation 'org.olap4j:olap4j:1.2.0'
+    implementation 'com.toedter:jcalendar:1.4'
+    implementation 'org.jfree:jfreechart:1.5.0'
+    //database
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
+    implementation 'org.flywaydb:flyway-mysql:8.5.13'
+    implementation 'javax.persistence:javax.persistence-api:2.2'
+    implementation 'org.eclipse.persistence:javax.persistence:2.1.0'
+    implementation 'org.eclipse.persistence:eclipselink:2.4.2'
+    //configuration
+    implementation 'org.springframework:spring-core'
+    implementation 'org.springframework:spring-context'
+    implementation 'org.yaml:snakeyaml'
+    //files
+    implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/commons-javaflow-20060411.jar')
+    implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/commons-report-1.8.2.jar')
+    implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/gradient-icon-font.jar')
+    implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/RXTXcomm.jar')
+    implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/JPlaceHolder.jar')
+    implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/mail.jar')
+    //tests
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

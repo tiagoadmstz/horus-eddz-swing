@@ -1,0 +1,824 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.cooperstandard.views.principal;
+
+import com.cooperstandard.dbs.ConexaoSql;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Timer;
+import java.util.TimerTask;
+
+/**
+ * @author rsouza10
+ */
+public class Supervisorio extends javax.swing.JInternalFrame {
+
+    DefaultTableModel modelo = new DefaultTableModel(null, new String[]{"Id", "Template_ID", "Valor", "Equipamento"}) {
+        @Override
+        public boolean isCellEditable(int row, int col) {
+            return false;
+        }
+    };
+
+    private final ConexaoSql conexaoSql;
+
+    public Supervisorio() {
+        conexaoSql = new ConexaoSql("supervisorio");
+        initComponents();
+        PreencherTabela();
+        txt_tid.setVisible(false);
+        txt_tid2.setVisible(false);
+        txt_tid3.setVisible(false);
+        txt_tid4.setVisible(false);
+        txt_tid5.setVisible(false);
+        jPanel3.setVisible(false);
+        jTable1.setVisible(false);
+
+        ((DefaultTableCellRenderer) jTable1.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+        jTable1.setForeground(Color.BLACK);
+        jTable1.setFont(new Font("arial", Font.BOLD, 16));
+        jTable1.getTableHeader().setFont(new Font("arial", Font.BOLD, 16));
+        jTable1.getTableHeader().setForeground(Color.RED);
+        jTable1.setRowHeight(30);
+        jTable1.setGridColor(Color.BLACK);
+        jTable1.setShowGrid(true);
+
+        String valor = jTable1.getValueAt(0, 1).toString();
+        String valor2 = jTable1.getValueAt(0, 2).toString();
+        String valor3 = jTable1.getValueAt(1, 1).toString();
+        String valor4 = jTable1.getValueAt(1, 2).toString();
+        String valor5 = jTable1.getValueAt(2, 1).toString();
+        String valor6 = jTable1.getValueAt(2, 2).toString();
+        String valor7 = jTable1.getValueAt(3, 1).toString();
+        String valor8 = jTable1.getValueAt(3, 2).toString();
+        String valor9 = jTable1.getValueAt(4, 1).toString();
+        String valor10 = jTable1.getValueAt(4, 2).toString();
+        txt_tid.setText(valor);
+        jTextField1.setText(valor2);
+        txt_tid2.setText(valor3);
+        jTextField2.setText(valor4);
+        txt_tid3.setText(valor5);
+        jTextField3.setText(valor6);
+        txt_tid4.setText(valor7);
+        jTextField4.setText(valor8);
+        txt_tid5.setText(valor9);
+        jTextField5.setText(valor10);
+
+        int delay = 1;   // delay de 5 seg.
+        int interval = 5000;  // intervalo de 1 seg.
+        Timer timer = new Timer();
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                try {
+                    final String query1 = "Select MAX(ExtA_IndParafuso)as value,"
+                            + "MAX(ExtA_IndFlange)as value2,"
+                            + "MAX(ExtA_IndInv1)as value3, "
+                            + "MAX(ExtA_IndInv2) as value4, "
+                            + "MAX(ExtA_IndRpm) as value5 FROM L11 GROUP BY E3TimeStamp";
+                    final Connection connection = conexaoSql.getCon();
+                    final Statement st = connection.createStatement();
+                    final ResultSet rs = st.executeQuery(query1);
+                    float value = 0f;
+                    float value2 = 0f;
+                    float value3 = 0f;
+                    float value4 = 0f;
+                    float value5 = 0f;
+                    while (rs.next()) {
+                        value = rs.getFloat("value");
+                        value2 = rs.getFloat("value2");
+                        value3 = rs.getFloat("value3");
+                        value4 = rs.getFloat("value4");
+                        value5 = rs.getFloat("value5");
+
+                    }
+                    real1.setText(String.valueOf(value));
+                    real2.setText(String.valueOf(value2));
+                    real3.setText(String.valueOf(value3));
+                    real4.setText(String.valueOf(value4));
+                    real5.setText(String.valueOf(value5));
+                    connection.close();
+//                    JOptionPane.showMessageDialog(null, value);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, delay, interval);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jTextField5 = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        txt_tid5 = new javax.swing.JTextField();
+        txt_tid4 = new javax.swing.JTextField();
+        txt_tid3 = new javax.swing.JTextField();
+        txt_tid2 = new javax.swing.JTextField();
+        txt_tid = new javax.swing.JTextField();
+        real1 = new javax.swing.JTextField();
+        real2 = new javax.swing.JTextField();
+        real3 = new javax.swing.JTextField();
+        real4 = new javax.swing.JTextField();
+        real5 = new javax.swing.JTextField();
+
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
+
+        jPanel1.setBackground(new java.awt.Color(51, 51, 51));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setText("Velocidade:");
+
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField1KeyPressed(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(0, 255, 51));
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton1.setText("Editar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField2KeyPressed(evt);
+            }
+        });
+
+        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField3KeyPressed(evt);
+            }
+        });
+
+        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField4KeyPressed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(0, 255, 51));
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton2.setText("Editar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setBackground(new java.awt.Color(0, 255, 51));
+        jButton3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton3.setText("Editar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setBackground(new java.awt.Color(0, 255, 51));
+        jButton4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton4.setText("Editar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jTextField5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jTextField5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jTextField5KeyPressed(evt);
+            }
+        });
+
+        jButton5.setBackground(new java.awt.Color(0, 255, 51));
+        jButton5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jButton5.setText("Editar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jLabel2.setText("Alterar:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel3.setText("Involucro 2:");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel4.setText("Flange:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel5.setText("Involucro 1:");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel6.setText("Parafuso:");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null},
+                        {null, null, null, null}
+                },
+                new String[]{
+                        "Title 1", "Title 2", "Title 3", "Title 4"
+                }
+        ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        txt_tid5.setText("jTextField9");
+
+        txt_tid4.setText("jTextField8");
+
+        txt_tid3.setText("jTextField7");
+
+        txt_tid2.setText("jTextField6");
+        txt_tid2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_tid2ActionPerformed(evt);
+            }
+        });
+
+        txt_tid.setText("jTextField3");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(22, 22, 22)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txt_tid5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_tid4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(txt_tid3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txt_tid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txt_tid2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGap(39, 39, 39)
+                                                .addComponent(txt_tid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txt_tid2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txt_tid3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txt_tid4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(txt_tid5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        real1.setEditable(false);
+        real1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        real1.setForeground(new java.awt.Color(255, 51, 51));
+        real1.setFocusable(false);
+        real1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                real1ActionPerformed(evt);
+            }
+        });
+
+        real2.setEditable(false);
+        real2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        real2.setForeground(new java.awt.Color(255, 51, 51));
+        real2.setFocusable(false);
+        real2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                real2ActionPerformed(evt);
+            }
+        });
+
+        real3.setEditable(false);
+        real3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        real3.setForeground(new java.awt.Color(255, 51, 51));
+        real3.setFocusable(false);
+        real3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                real3ActionPerformed(evt);
+            }
+        });
+
+        real4.setEditable(false);
+        real4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        real4.setForeground(new java.awt.Color(255, 51, 51));
+        real4.setFocusable(false);
+        real4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                real4ActionPerformed(evt);
+            }
+        });
+
+        real5.setEditable(false);
+        real5.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        real5.setForeground(new java.awt.Color(255, 51, 51));
+        real5.setFocusable(false);
+        real5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                real5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(174, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel5)
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addComponent(jLabel4)
+                                                                        .addComponent(jLabel6))
+                                                                .addGap(50, 50, 50))
+                                                        .addComponent(jLabel3)
+                                                        .addComponent(jLabel1))
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(real1, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
+                                                        .addComponent(real2)
+                                                        .addComponent(real3)
+                                                        .addComponent(real4)
+                                                        .addComponent(real5))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(40, 40, 40)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))
+                                                        .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(0, 165, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(real1)
+                                                        .addComponent(jButton1))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel4)
+                                                        .addComponent(jButton2)
+                                                        .addComponent(real2))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel5)
+                                                        .addComponent(jButton3)
+                                                        .addComponent(real3))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jLabel3)
+                                                        .addComponent(jButton4)
+                                                        .addComponent(real4))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(jLabel1)
+                                                                .addComponent(real5))
+                                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(jButton5))))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addComponent(jLabel6)
+                                                .addGap(228, 228, 228)))
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(348, 348, 348))
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void PreencherTabela() {
+        try {
+            modelo.setNumRows(0);
+            final Connection con = conexaoSql.conectar();
+            final String query1 = "Select ValueID,TemplateID, Value, TAG from Operacao_ValueData ORDER by TemplateID asc";
+            final Statement st = con.createStatement();
+            final ResultSet rs = st.executeQuery(query1);
+            while (rs.next()) {
+                modelo.addRow(new Object[]{rs.getInt("ValueID"), rs.getInt("TemplateID"), rs.getString("Value"), rs.getString("TAG")});
+            }
+            con.close();
+            modelo.isCellEditable(modelo.getColumnCount(), modelo.getRowCount());
+            jTable1.setModel(modelo);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
+                final Connection con = conexaoSql.conectar();
+                final String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                final PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField1.getText());
+                pst.setString(2, txt_tid.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }   // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        int p = JOptionPane.showConfirmDialog(null, "Você deseja realmente Alterar?", "Alterar", JOptionPane.YES_NO_OPTION);
+        if (p == 0) {
+            try {
+                final Connection con = conexaoSql.conectar();
+                final String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                final PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField1.getText());
+                pst.setString(2, txt_tid.getText());
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+                PreencherTabela();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
+                final Connection con = conexaoSql.conectar();
+                final String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                final PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField2.getText());
+                pst.setString(2, txt_tid2.getText());
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+                PreencherTabela();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2KeyPressed
+
+    private void jTextField3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
+
+                Connection con = conexaoSql.conectar();
+                String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField3.getText());
+                pst.setString(2, txt_tid3.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3KeyPressed
+
+    private void jTextField4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
+
+                Connection con = conexaoSql.conectar();
+                String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField4.getText());
+                pst.setString(2, txt_tid4.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4KeyPressed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        int p = JOptionPane.showConfirmDialog(null, "Você deseja realmente Alterar?", "Alterar", JOptionPane.YES_NO_OPTION);
+        if (p == 0) {
+            try {
+
+                Connection con = conexaoSql.conectar();
+                String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField2.getText());
+                pst.setString(2, txt_tid2.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }  // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        int p = JOptionPane.showConfirmDialog(null, "Você deseja realmente Alterar?", "Alterar", JOptionPane.YES_NO_OPTION);
+        if (p == 0) {
+            try {
+
+                Connection con = conexaoSql.conectar();
+                String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField3.getText());
+                pst.setString(2, txt_tid3.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        int p = JOptionPane.showConfirmDialog(null, "Você deseja realmente Alterar?", "Alterar", JOptionPane.YES_NO_OPTION);
+        if (p == 0) {
+            try {
+
+                Connection con = conexaoSql.conectar();
+                String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField4.getText());
+                pst.setString(2, txt_tid4.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jTextField5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField5KeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            try {
+
+                Connection con = conexaoSql.conectar();
+                String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField5.getText());
+                pst.setString(2, txt_tid5.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField5KeyPressed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        int p = JOptionPane.showConfirmDialog(null, "Você deseja realmente Alterar?", "Alterar", JOptionPane.YES_NO_OPTION);
+        if (p == 0) {
+            try {
+
+                Connection con = conexaoSql.conectar();
+                String sql = "update Operacao_ValueData set Value=? where TemplateID=?";
+                PreparedStatement pst = con.prepareStatement(sql);
+                pst.setString(1, jTextField5.getText());
+                pst.setString(2, txt_tid5.getText());
+                //                pst.setString(3, txt_tid.getText());
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+
+                PreencherTabela();
+                //                jTextField1.setText(null);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        if (evt.getClickCount() == 2) {
+
+            int i = jTable1.getSelectedRow();
+            TableModel model = jTable1.getModel();
+            txt_tid.setText(model.getValueAt(i, 1).toString());
+            jTextField1.setText(model.getValueAt(i, 2).toString());
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void txt_tid2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_tid2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_tid2ActionPerformed
+
+    private void real1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_real1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_real1ActionPerformed
+
+    private void real2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_real2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_real2ActionPerformed
+
+    private void real3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_real3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_real3ActionPerformed
+
+    private void real4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_real4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_real4ActionPerformed
+
+    private void real5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_real5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_real5ActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField real1;
+    private javax.swing.JTextField real2;
+    private javax.swing.JTextField real3;
+    private javax.swing.JTextField real4;
+    private javax.swing.JTextField real5;
+    private javax.swing.JTextField txt_tid;
+    private javax.swing.JTextField txt_tid2;
+    private javax.swing.JTextField txt_tid3;
+    private javax.swing.JTextField txt_tid4;
+    private javax.swing.JTextField txt_tid5;
+    // End of variables declaration//GEN-END:variables
+}

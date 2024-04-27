@@ -1,0 +1,37 @@
+networks:
+  eddz-network:
+    driver: bridge
+
+services:
+  eddz:
+    image: openjdk:8-jdk
+    container_name: eddz
+    working_dir: /home/eddz
+    env_file:
+      - ./eddz.env
+    ports:
+      - 8080:8080
+    volumes:
+      - ../:/home/eddz/:rw
+    command: java -jar eddz.jar
+    networks:
+      - eddz-network
+
+  mysql:
+    image: mysql:latest
+    container_name: eddz-mysql
+    env_file:
+      - ./mysql.env
+    ports:
+      - 3306:3306
+    networks:
+      - eddz-network
+
+  adminer:
+    image: adminer
+    container_name: eddz-adminer
+    restart: always
+    ports:
+      - 8081:8080
+    networks:
+      - eddz-network
