@@ -1,21 +1,18 @@
 package com.cooperstandard.services;
 
-import com.cooperstandard.model.ModelSessaoUsuario;
+import com.cooperstandard.services.rest.UserRestService;
 import com.cooperstandard.views.extrusao.ViewExtrusao;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 
 import javax.swing.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class UserRestService extends AbstractRestService {
+public class ExtrusionService {
 
     private final Map<String, JMenuItem> permissions = new HashMap<>(1);
+    private final UserRestService userRestService;
 
-    public UserRestService(final ViewExtrusao viewExtrusao) {
+    public ExtrusionService(final ViewExtrusao viewExtrusao) {
         this.permissions.put("MenuRelatorio", viewExtrusao.getJMenuItem18());
         this.permissions.put("Validacao", viewExtrusao.getJMenuItem10());
         this.permissions.put("AlteracaoDados", viewExtrusao.getAlteracaoDados());
@@ -30,27 +27,15 @@ public class UserRestService extends AbstractRestService {
         this.permissions.put("PainelAlteracaoAT", viewExtrusao.getPainelAlteracaoAT());
         this.permissions.put("MenuUsuario", viewExtrusao.getJMenuItem40());
         this.permissions.put("AcompanhamentoDDZ", viewExtrusao.getJMenuItem23());
+        this.userRestService = new UserRestService();
     }
 
-    public String configureLine() {
-        final ResponseEntity<String> response = restTemplate.getForEntity(
-                String.format("%s/user/line/{1}", BASE_URL),
-                String.class,
-                ModelSessaoUsuario.nome
-        );
-        return response.getBody();
+    public String getLine() {
+        return userRestService.findLineByUser();
     }
 
     public void liberarModulos() {
-        final ResponseEntity<List<String>> response = restTemplate.exchange(
-                String.format("%s/user/permissions/{1}", BASE_URL),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<String>>() {
-                },
-                ModelSessaoUsuario.codigo
-        );
-        response.getBody().forEach(permission -> {
+        userRestService.findPermissionsByUser().forEach(permission -> {
             if (permissions.containsKey(permission)) permissions.get(permission).setEnabled(true);
         });
     }

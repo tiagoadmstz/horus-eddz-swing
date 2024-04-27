@@ -1,6 +1,6 @@
 package com.cooperstandard.views.extrusao;
 
-import com.cooperstandard.services.UserRestService;
+import com.cooperstandard.services.ExtrusionService;
 import com.cooperstandard.util.ControleInstancias;
 import com.cooperstandard.views.acabamento.ViewAcabamento;
 import com.cooperstandard.views.acabamento.ViewControleProcessoAc;
@@ -24,17 +24,17 @@ import java.io.IOException;
 @Getter
 public final class ViewExtrusao extends javax.swing.JFrame {
 
-    private final UserRestService userRestService;
+    private final ExtrusionService extrusionService;
     public final String linha;
 
     public ViewExtrusao() {
         initComponents();
-        userRestService = new UserRestService(this);
+        extrusionService = new ExtrusionService(this);
+        linha = extrusionService.getLine();
+        extrusionService.liberarModulos();
+        //arduino.initialize();
+        //atualizateste();
         jMenuItem23.setVisible(false);
-//        arduino.initialize();
-        linha = userRestService.configureLine();
-//        atualizateste();
-        userRestService.liberarModulos();
         setExtendedState(MAXIMIZED_BOTH);
         setLayout(new GridLayout());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

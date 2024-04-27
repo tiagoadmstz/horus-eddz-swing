@@ -1,4 +1,4 @@
-package com.cooperstandard.services;
+package com.cooperstandard.services.rest;
 
 import com.cooperstandard.model.ModelUsuario;
 import org.springframework.http.HttpStatus;

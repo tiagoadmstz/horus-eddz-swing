@@ -1,4 +1,4 @@
-package com.cooperstandard.services;
+package com.cooperstandard.services.rest;
 
 import org.springframework.web.client.RestTemplate;
 

@@ -2,7 +2,7 @@ package com.cooperstandard.views.principal;
 
 import com.cooperstandard.dal.config.EntityManagerHelper;
 import com.cooperstandard.model.ModelUsuario;
-import com.cooperstandard.services.SecurityRestService;
+import com.cooperstandard.services.rest.SecurityRestService;
 import com.cooperstandard.views.extrusao.ViewExtrusao;
 
 import javax.swing.*;
