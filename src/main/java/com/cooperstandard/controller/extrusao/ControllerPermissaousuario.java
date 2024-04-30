@@ -1,26 +1,16 @@
 package com.cooperstandard.controller.extrusao;
 
 import com.cooperstandard.model.ModelPermissaousuario;
-import com.cooperstandard.dao.extrusao.DAOPermissaousuario;
-import java.util.ArrayList;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
-*
-* @author Rafael
-*/
+ * @author Rafael
+ */
 public class ControllerPermissaousuario {
 
-    private DAOPermissaousuario daoPermissaousuario = new DAOPermissaousuario();
-
-    public int salvarPermissaousuarioController(ModelPermissaousuario pModelPermissaousuario){
-        return this.daoPermissaousuario.salvarPermissaousuarioDAO(pModelPermissaousuario);
-    }
-
-    public boolean excluirPermissaousuarioController(int pCodigo){
-        return this.daoPermissaousuario.excluirPermissaousuarioDAO(pCodigo);
-    }
-
-    public ArrayList<ModelPermissaousuario> getListaPermissaousuarioController(int pCodigo) {
-        return this.daoPermissaousuario.getListaPermissaousuarioDAO(pCodigo);
+    public List<ModelPermissaousuario> getListaPermissaousuarioController(int pCodigo) {
+        return Collections.emptyList();
     }
 }

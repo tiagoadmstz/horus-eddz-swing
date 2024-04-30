@@ -10,6 +10,7 @@ import com.cooperstandard.model.ModelSessaoUsuario;
 import com.cooperstandard.controller.extrusao.ControllerPermissaousuario;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -287,8 +288,7 @@ public class ViewInspecao extends javax.swing.JFrame {
 
     private void liberarModulos() {
         ControllerPermissaousuario controllerPermissaousuario = new ControllerPermissaousuario();
-        ArrayList<ModelPermissaousuario> listaModelPermissaousuarios = new ArrayList<>();
-        listaModelPermissaousuarios = controllerPermissaousuario.getListaPermissaousuarioController(new ModelSessaoUsuario().codigo);
+        final List<ModelPermissaousuario> listaModelPermissaousuarios = controllerPermissaousuario.getListaPermissaousuarioController(new ModelSessaoUsuario().codigo);
         cria();
         for (int i = 0; i < listaModelPermissaousuarios.size(); i++) {
             if (listaModelPermissaousuarios.get(i).getPermissao().equals("MenuRelatorio")) {

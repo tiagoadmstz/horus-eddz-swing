@@ -5,31 +5,31 @@
  */
 package com.cooperstandard.views.principal;
 
-import com.cooperstandard.controller.extrusao.ControllerPermissaousuario;
-import com.cooperstandard.controller.extrusao.ControllerUsuario;
-import com.cooperstandard.model.ModelPermissaousuario;
 import com.cooperstandard.model.ModelUsuario;
+import com.cooperstandard.services.UserService;
 import com.cooperstandard.util.EstiloTablaRenderer;
 import com.cooperstandard.util.HeaderRenderer;
+import lombok.Getter;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
 
 /**
  * @author rsouza10
  */
+@Getter
 public class ViewUsuario extends javax.swing.JFrame {
 
     private static final long serialVersionUID = -715113168908101656L;
+    private final UserService userService;
 
     /**
      * Creates new form ViewUsuario1
      */
     public ViewUsuario() {
         initComponents();
-        this.carregarUsuarios();
-        this.cancelarOperacao();
+        userService = new UserService(this);
+        userService.carregarUsuarios(tbUsuario);
+        desabilitarCampos();
         tbUsuario.getTableHeader().setDefaultRenderer(new HeaderRenderer(tbUsuario));
         tbUsuario.setDefaultRenderer(Integer.class, new EstiloTablaRenderer());
         tbUsuario.setDefaultRenderer(String.class, new EstiloTablaRenderer());
@@ -525,16 +525,12 @@ public class ViewUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Você deve informar o nome para salvar!", "Atenção!", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         String senha, confirmaSenha;
         senha = new String(this.jtfSenha.getPassword());
         confirmaSenha = new String(this.jtfConfirmarSenha.getPassword());
-
-        //testa se as senhas são iguais
         if (senha.equals(confirmaSenha)) {
             this.alterarUsuario();
             limpaCampos();
-
         } else {
             JOptionPane.showMessageDialog(rootPane, "As senhas digitadas não conferem!", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
@@ -620,17 +616,14 @@ public class ViewUsuario extends javax.swing.JFrame {
         String nome = (String) tbUsuario.getValueAt(linha, 1);
         int codigo = (int) tbUsuario.getValueAt(linha, 0);
 
-        ControllerUsuario controllerUsuario = new ControllerUsuario();
-        ControllerPermissaousuario controllerPermissaousuario = new ControllerPermissaousuario();
-        //pegunta se realmente deseja excluir o tipo de produto
         int opcao = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja"
                 + " excluir o usuário:\n" + "\n " + nome + "?", "Atenção", JOptionPane.YES_NO_OPTION);
-        //se sim exclui, se não não faz nada
+
         if (opcao == JOptionPane.OK_OPTION) {
-            if (controllerUsuario.excluirUsuarioController(codigo)) {
-                controllerPermissaousuario.excluirPermissaousuarioController(codigo);
+            if (userService.deleteUser(codigo)) {
+                userService.deletePermissionByUserId(codigo);
                 JOptionPane.showMessageDialog(this, "Registro excluido com suscesso!");
-                this.carregarUsuarios();
+                userService.carregarUsuarios(tbUsuario);
                 this.novoUsuario();
             }
         }
@@ -638,24 +631,17 @@ public class ViewUsuario extends javax.swing.JFrame {
 
     private void jButtonAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAlterarActionPerformed
         desativarPermissao();
-        this.recuperarUsuario();
+        userService.recuperarUsuario(this, tbUsuario);
         this.habilitarCampos();
-
-        //abilita botão da interface
         jtfCodigo.setEditable(false);
         this.jbCadastrar.setEnabled(false);
         jbConfirmarAlteracao.setEnabled(true);
-
-        //volta a aba anterior
         this.jTabbedPaneTipoProduto.setSelectedIndex(this.jTabbedPaneTipoProduto.getSelectedIndex() - 1);
         check();
     }//GEN-LAST:event_jButtonAlterarActionPerformed
 
     private boolean salvarUsuario() {
-        ModelUsuario modelUsuario = new ModelUsuario();
-        int codigousuario;
-        ControllerUsuario controllerUsuario = new ControllerUsuario();
-        ControllerPermissaousuario controllerPermissaousuario = new ControllerPermissaousuario();
+        final ModelUsuario modelUsuario = new ModelUsuario();
         modelUsuario.setNome(this.jtfNome.getText());
         modelUsuario.setLogin(this.jtfLogin.getText());
         modelUsuario.setSenha(new String(this.jtfSenha.getPassword()));
@@ -663,12 +649,10 @@ public class ViewUsuario extends javax.swing.JFrame {
         modelUsuario.setSobrenome(this.jtfNome1.getText());
         modelUsuario.setPlanta(this.jComboBox1.getSelectedItem().toString());
         modelUsuario.setEmail(this.txtEmail.getText());
-        codigousuario = controllerUsuario.salvarUsuarioController(modelUsuario);
-        if (codigousuario > 0) {
-            controllerPermissaousuario.salvarPermissaousuarioController(setardadosPermissaoUsuario(codigousuario));
+        if (userService.saveUser(modelUsuario)) {
             JOptionPane.showMessageDialog(this, "Registro gravado com sucesso!");
-            this.cancelarOperacao();
-            this.carregarUsuarios();
+            this.desabilitarCampos();
+            userService.carregarUsuarios(tbUsuario);
             this.novoUsuario();
             jTabbedPaneTipoProduto.setSelectedIndex(jTabbedPaneTipoProduto.getSelectedIndex() + 1);
             return true;
@@ -676,118 +660,10 @@ public class ViewUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Erro ao gravar os dados!", "ERRO", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
-    }
-
-    public ModelPermissaousuario setardadosPermissaoUsuario(int pCodigoUsuario) {
-        ArrayList<ModelPermissaousuario> listaModelPermissaousuarios = new ArrayList<>();
-        ModelPermissaousuario modelPermissaousuario = new ModelPermissaousuario();
-        modelPermissaousuario = new ModelPermissaousuario();
-        if (jbcPainelAlteracaoAC.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("PainelAlteracaoAC");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jbcPainelAlteracaoEX.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("PainelAlteracaoEX");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jbcPainelAlteracaoQU.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("PainelAlteracaoQU");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jbcPainelAlteracaoAT.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("PainelAlteracaoAT");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jbcPainelAlteracaoInsp.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("PainelAlteracaoInsp");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbCadastroFichaAC.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("CadastroFichaAC");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbCadastroFichaEX.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("CadastroFichaEX");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbCadastroFichaInsp.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("CadastroFichaInsp");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbEntradaDadosAC.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("EntradaDadosAC");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbEntradaDadosEX.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("EntradaDadosEX");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbEntradaDadosSuperV.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("EntradaDadosSuperV");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbEntradaDadosInspeção.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("EntradaDadosInsp");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbAlteracaoDados.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("AlteracaoDados");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbValidacao.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("Validacao");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbRelatorio.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("MenuRelatorio");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-        if (jcbUsuario.isSelected()) {
-            modelPermissaousuario = new ModelPermissaousuario();
-            modelPermissaousuario.setCodigo_usuario(pCodigoUsuario);
-            modelPermissaousuario.setPermissao("MenuUsuario");
-            listaModelPermissaousuarios.add(modelPermissaousuario);
-        }
-
-        modelPermissaousuario.setListaModelPermissaousuarios(listaModelPermissaousuarios);
-        return modelPermissaousuario;
     }
 
     private boolean alterarUsuario() {
         ModelUsuario modelUsuario = new ModelUsuario();
-        ControllerPermissaousuario controllerPermissaousuario = new ControllerPermissaousuario();
-        ControllerUsuario controllerUsuario = new ControllerUsuario();
         modelUsuario.setCodigo(Integer.parseInt(this.jtfCodigo.getText()));
         modelUsuario.setNome(this.jtfNome.getText());
         modelUsuario.setLogin(this.jtfLogin.getText());
@@ -796,129 +672,17 @@ public class ViewUsuario extends javax.swing.JFrame {
         modelUsuario.setSobrenome(this.jtfNome1.getText());
         modelUsuario.setPlanta(this.jComboBox1.getSelectedItem().toString());
         modelUsuario.setEmail(txtEmail.getText());
-        if (controllerUsuario.atualizarUsuarioController(modelUsuario)) {
-            controllerPermissaousuario.excluirPermissaousuarioController(modelUsuario.getCodigo());
-            controllerPermissaousuario.salvarPermissaousuarioController(setardadosPermissaoUsuario(modelUsuario.getCodigo()));
+        modelUsuario.setPermissions(userService.setardadosPermissaoUsuario(modelUsuario.getCodigo()));
+        if (userService.updateUser(modelUsuario)) {
             JOptionPane.showMessageDialog(this, "Registro alterado com sucesso!");
-            this.cancelarOperacao();
-            this.carregarUsuarios();
+            desabilitarCampos();
+            userService.carregarUsuarios(tbUsuario);
             jTabbedPaneTipoProduto.setSelectedIndex(jTabbedPaneTipoProduto.getSelectedIndex() + 1);
             return true;
         } else {
             JOptionPane.showMessageDialog(this, "Erro ao alterar os dados!", "ERRO", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
-    }
-
-    private void cancelarOperacao() {
-        desabilitarCampos();
-    }
-
-    private void carregarUsuarios() {
-        ArrayList<ModelUsuario> listaUsuarios = new ArrayList<>();
-        ControllerUsuario controllerUsuario = new ControllerUsuario();
-        listaUsuarios = controllerUsuario.getListaUsuarioController();
-
-        DefaultTableModel modelo = (DefaultTableModel) tbUsuario.getModel();
-        modelo.setNumRows(0);
-
-        //CARREGA OS DADOS DA LISTA NA TABELA
-        int cont = listaUsuarios.size();
-        for (int i = 0; i < cont; i++) {
-            modelo.addRow(new Object[]{
-                    listaUsuarios.get(i).getCodigo(),
-                    listaUsuarios.get(i).getNome(),
-                    listaUsuarios.get(i).getLogin(),
-                    listaUsuarios.get(i).getSetor(),
-                    listaUsuarios.get(i).getPlanta(),
-                    listaUsuarios.get(i).getEmail()
-            });
-        }
-    }
-
-    private boolean recuperarUsuario() {
-        ModelUsuario modelUsuario = new ModelUsuario();
-        ControllerUsuario controllerUsuario = new ControllerUsuario();
-        ControllerPermissaousuario controllerPermissaousuario = new ControllerPermissaousuario();
-        ArrayList<ModelPermissaousuario> listaModelPermissaousuarios = new ArrayList<>();
-        //recebe a linha selecionada
-        int linha = this.tbUsuario.getSelectedRow();
-        //pega o codigo do cliente na linha selecionada
-        int codigo = (Integer) tbUsuario.getValueAt(linha, 0);
-        try {
-            //recupera os dados do banco
-            modelUsuario = controllerUsuario.getUsuarioController(codigo);
-            listaModelPermissaousuarios = controllerPermissaousuario.getListaPermissaousuarioController(codigo);
-            //seta os dados na interface
-            this.jtfCodigo.setText(String.valueOf(modelUsuario.getCodigo()));
-            this.jtfNome.setText(modelUsuario.getNome());
-            this.jtfLogin.setText(modelUsuario.getLogin());
-            this.jtfSenha.setText(modelUsuario.getSenha());
-            this.jtfConfirmarSenha.setText(modelUsuario.getSenha());
-            this.cbSetor.setSelectedItem(modelUsuario.getSetor());
-            this.jtfNome1.setText(modelUsuario.getSobrenome());
-            this.jComboBox1.setSelectedItem(modelUsuario.getPlanta());
-            this.txtEmail.setText(modelUsuario.getEmail());
-            //preencher permissoes
-            for (int i = 0; i < listaModelPermissaousuarios.size(); i++) {
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("PainelAlteracaoAC")) {
-                    jbcPainelAlteracaoAC.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("PainelAlteracaoEX")) {
-                    jbcPainelAlteracaoEX.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("PainelAlteracaoQU")) {
-                    jbcPainelAlteracaoQU.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("PainelAlteracaoAT")) {
-                    jbcPainelAlteracaoAT.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("PainelAlteracaoInsp")) {
-                    jbcPainelAlteracaoInsp.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("CadastroFichaAC")) {
-                    jcbCadastroFichaAC.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("CadastroFichaEX")) {
-                    jcbCadastroFichaEX.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("CadastroFichaInsp")) {
-                    jcbCadastroFichaInsp.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("EntradaDadosAC")) {
-                    jcbEntradaDadosAC.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("EntradaDadosEX")) {
-                    jcbEntradaDadosEX.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("EntradaDadosSuperV")) {
-                    jcbEntradaDadosSuperV.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("EntradaDadosInsp")) {
-                    jcbEntradaDadosInspeção.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("AlteracaoDados")) {
-                    jcbAlteracaoDados.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("Validacao")) {
-                    jcbValidacao.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("MenuRelatorio")) {
-                    jcbRelatorio.setSelected(true);
-                }
-                if (listaModelPermissaousuarios.get(i).getPermissao().equals("MenuUsuario")) {
-                    jcbUsuario.setSelected(true);
-                }
-
-            }
-
-            return true;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Código inválido ou nenhum registro selecionado", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
     }
 
     protected void desabilitarCampos() {
@@ -933,7 +697,7 @@ public class ViewUsuario extends javax.swing.JFrame {
         jComboBox1.setEnabled(false);
         txtEmail.setEnabled(false);
         jComboBox1.setSelectedIndex(-1);
-        carregarUsuarios();
+        userService.carregarUsuarios(tbUsuario);
     }
 
     private void novoUsuario() {
@@ -996,7 +760,7 @@ public class ViewUsuario extends javax.swing.JFrame {
         jtfNome1.setEnabled(true);
         jComboBox1.setEnabled(true);
         txtEmail.setEnabled(true);
-        carregarUsuarios();
+        userService.carregarUsuarios(tbUsuario);
     }
 
     public void limpaCampos() {
