@@ -9,9 +9,9 @@
     <class>com.cooperstandard.entitie.velocidade</class>
     <class>com.cooperstandard.entitie.problemas</class>
     <class>com.cooperstandard.entitie.ddz</class>
-    <class>com.cooperstandard.entitie.Report_Filter</class>
+    <class>com.cooperstandard.entitie.ReportFilter</class>
     <class>com.cooperstandard.entitie.Report</class>
-    <class>com.cooperstandard.entitie.Report_Group</class>
+    <class>com.cooperstandard.entitie.ReportGroup</class>
     <class>com.cooperstandard.entitie.Teste</class>
     <properties>
       <property name="eclipselink.target-database" value="SQLServer"/>

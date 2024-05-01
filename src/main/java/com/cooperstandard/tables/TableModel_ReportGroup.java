@@ -1,6 +1,6 @@
 package com.cooperstandard.tables;
 
-import com.cooperstandard.entitie.Report_Group;
+import com.cooperstandard.entitie.ReportGroup;
 import com.cooperstandard.frames.seletores.TableModelDefaultAdapter;
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author rsouza10
  */
-public class TableModel_ReportGroup extends TableModelDefaultAdapter<Report_Group> {
+public class TableModel_ReportGroup extends TableModelDefaultAdapter<ReportGroup> {
 
     private static final long serialVersionUID = 1333428913836012196L;
 
@@ -25,7 +25,7 @@ public class TableModel_ReportGroup extends TableModelDefaultAdapter<Report_Grou
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Report_Group report = (Report_Group) lista.get(rowIndex);
+        ReportGroup report = (ReportGroup) lista.get(rowIndex);
         switch (columnIndex) {
             case 0:
                 return report.getNome();
@@ -35,7 +35,7 @@ public class TableModel_ReportGroup extends TableModelDefaultAdapter<Report_Grou
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        Report_Group report = (Report_Group) lista.get(rowIndex);
+        ReportGroup report = (ReportGroup) lista.get(rowIndex);
         switch (columnIndex) {
             case 0:
                 report.setNome(aValue.toString());

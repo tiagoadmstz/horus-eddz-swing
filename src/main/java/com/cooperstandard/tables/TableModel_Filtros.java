@@ -1,7 +1,7 @@
 package com.cooperstandard.tables;
 
 
-import com.cooperstandard.entitie.Report_Filter;
+import com.cooperstandard.entitie.ReportFilter;
 import com.cooperstandard.frames.seletores.TableModelDefaultAdapter;
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author tiago.teixeira
  */
-public final class TableModel_Filtros extends TableModelDefaultAdapter<Report_Filter> {
+public final class TableModel_Filtros extends TableModelDefaultAdapter<ReportFilter> {
 
     private static final long serialVersionUID = -8104928841906356738L;
     private final String[] columnName = new String[]{"Filtro", "Valor"};
@@ -18,14 +18,14 @@ public final class TableModel_Filtros extends TableModelDefaultAdapter<Report_Fi
         setColmunName(columnName);
     }
 
-    public TableModel_Filtros(List<Report_Filter> lista) {
+    public TableModel_Filtros(List<ReportFilter> lista) {
         super(lista);
         setColmunName(columnName);
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Report_Filter filtro = (Report_Filter) lista.get(rowIndex);
+        ReportFilter filtro = (ReportFilter) lista.get(rowIndex);
         switch (columnIndex) {
             case 0:
                 return filtro.getNome();
@@ -37,7 +37,7 @@ public final class TableModel_Filtros extends TableModelDefaultAdapter<Report_Fi
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        Report_Filter filtro = (Report_Filter) lista.get(rowIndex);
+        ReportFilter filtro = (ReportFilter) lista.get(rowIndex);
         switch (columnIndex) {
             case 0:
                 filtro.setNome(aValue.toString());

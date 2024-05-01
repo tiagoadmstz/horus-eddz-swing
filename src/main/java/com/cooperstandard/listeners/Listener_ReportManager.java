@@ -1,18 +1,12 @@
 package com.cooperstandard.listeners;
 
-import com.cooperstandard.dal.config.ControleInstancias;
 import com.cooperstandard.dal.config.EntityManagerHelper;
 import com.cooperstandard.dbs.ConexaoSql;
 import com.cooperstandard.entitie.Report;
-import com.cooperstandard.entitie.Report_Filter;
-import com.cooperstandard.entitie.Report_Group;
-import com.cooperstandard.frames.seletores.Datas;
-import com.cooperstandard.frames.seletores.MessageFactory;
-import com.cooperstandard.frames.seletores.SeletorDatas;
-import com.cooperstandard.frames.seletores.SeletorHorario;
-import com.cooperstandard.frames.seletores.SeletorInputString;
-import com.cooperstandard.frames.seletores.SeletorSimpleComboBox;
+import com.cooperstandard.entitie.ReportFilter;
+import com.cooperstandard.entitie.ReportGroup;
 import com.cooperstandard.model.ModelSessaoUsuario;
+import com.cooperstandard.services.ReportService;
 import com.cooperstandard.tables.TableModel_Filtros;
 import com.cooperstandard.tables.TableModel_Report;
 import com.cooperstandard.tables.TableModel_ReportGroup;
@@ -41,18 +35,13 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -64,14 +53,15 @@ public final class Listener_ReportManager implements ActionListener {
     private TableModel_Report model_report;
     private TableModel_Filtros model_filtros;
     private List<Report> reports;
-    private List<Report_Group> groups;
+    private List<ReportGroup> groups;
     private final Map<String, Object> mapParam = new HashMap();
     private EntityManagerHelper emh;
+    private final ReportService reportService;
 
     public Listener_ReportManager(ViewRelatorio form) {
         this.form = form;
+        this.reportService = new ReportService(form, mapParam, model_filtros);
         initComponents();
-
     }
 
     public void initComponents() {
@@ -86,28 +76,18 @@ public final class Listener_ReportManager implements ActionListener {
         form.getTbGrupo().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
-                List<Report> rpt = reports.stream()
-                        .filter(r -> r.getGrupo().equals(model_group.getObject(form.getTbGrupo().getSelectedRow())))
-                        .collect(Collectors.toList());
-                model_report.setLista(rpt.stream()
-                        .sorted(Comparator.comparing(Report::getOrdem)
-                                .thenComparing(Report::getNome))
-                        .collect(Collectors.toList()));
+                final ReportGroup reportGroup = model_group.getObject(form.getTbGrupo().getSelectedRow());
+                model_report.setLista(reportGroup.getReportList());
             }
         });
         form.getTbRelatorio().addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 model_filtros.deletarLista();
-                Optional<List<Report_Filter>> op = reports.stream()
-                        .filter(r -> {
-                            return r.getGrupo().equals(model_group.getObject(form.getTbGrupo().getSelectedRow()))
-                                    && r.getNome().equals(model_report.getObject(form.getTbRelatorio().getSelectedRow()).getNome());
-                        })
-                        .map(Report::getFiltros).findFirst();
-                if (op.isPresent()) {
-                    List<Report_Filter> filtros = op.get();
-                    filtros.stream().sorted(Comparator.comparing(Report_Filter::getOrdem).thenComparing(Report_Filter::getNome))
+                final Report selectedReport = model_report.getObject(form.getTbRelatorio().getSelectedRow());
+                if (Objects.nonNull(selectedReport.getFiltros())) {
+                    selectedReport.getFiltros().stream()
+                            .sorted(Comparator.comparing(ReportFilter::getOrdem).thenComparing(ReportFilter::getNome))
                             .forEach(f -> model_filtros.addObject(f));
                 }
             }
@@ -120,7 +100,6 @@ public final class Listener_ReportManager implements ActionListener {
                 }
             }
         });
-
     }
 
     public void addModel() {
@@ -134,21 +113,10 @@ public final class Listener_ReportManager implements ActionListener {
     }
 
     private void carregaListas() {
-        try {
-            reports = (List<Report>) emh.getObjectListNamedQuery(Report.class, "report.findByIds", new String[]{"paramIds"}, new Object[]{this.getReportIdListBySetorUsuario(ModelSessaoUsuario.setor)}, EntityManagerHelper.SQLSERVER_PU).get();
-            groups = (List<Report_Group>) emh.getObjectListNamedQuery(Report_Group.class, "report_group.findAll", null, null, EntityManagerHelper.SQLSERVER_PU).get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private List<Long> getReportIdListBySetorUsuario(String setor) {
-        try {
-            String valor = String.valueOf(emh.getObjectNativeQuery("SELECT dbo.OBTER_RELATORIOS_SETOR(?)", setor, EntityManagerHelper.SQLSERVER_PU));
-            return Arrays.stream(valor.split(",")).map(Long::parseLong).collect(Collectors.toList());
-        } catch (Exception e) {
-            return new ArrayList();
-        }
+        groups = reportService.findBySector(ModelSessaoUsuario.setor);
+        reports = groups.stream()
+                .flatMap(group -> group.getReportList().stream())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -160,88 +128,15 @@ public final class Listener_ReportManager implements ActionListener {
             case "imprimir":
                 form.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 imprimir();
-
                 break;
-
         }
         form.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
     private void getSeletor() {
-        Report report = model_report.getObject(form.getTbRelatorio().getSelectedRow());
-        Report_Filter filtro = model_filtros.getObject(form.getTbFiltro().getSelectedRow());
-        switch (filtro.getTipo()) {
-            case "datas":
-                SeletorDatas sd = (SeletorDatas) ControleInstancias.getInstance(SeletorDatas.class);
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                sd.getBtConfirmar().addActionListener(ev -> {
-                    LocalDate[] datas = sd.getArrayDatas();
-                    filtro.setValor(datas[0].format(dtf) + " à " + datas[1].format(dtf));
-                    mapParam.put("dataini", Datas.localDateToDate(datas[0]));
-                    mapParam.put("datafim", Datas.localDateToDate(datas[1]));
-                    model_filtros.fireTableDataChanged();
-                    sd.dispose();
-                });
-                sd.setVisible(true);
-                break;
-            case "horas":
-                SeletorHorario horario = (SeletorHorario) ControleInstancias.getInstance(SeletorHorario.class);
-                horario.getBtConfirmar().addActionListener(event -> {
-                    filtro.setValor(horario.getHoraInicial() + " à " + horario.getHoraFinal());
-                    mapParam.put("horaini", horario.getHoraInicial());
-                    mapParam.put("horafim", horario.getHoraFinal());
-                    horario.dispose();
-                });
-                horario.setVisible(true);
-                break;
-            case "boolean":
-                break;
-            case "combobox":
-                if (filtro.getNome().equals("Linha")) {
-                    montSeletorComboBox(filtro, "Linha", "linha", getLinhas(getConnection(), "Extrusão").toArray());
-                } else if (filtro.getNome().equals("Teste")) {
-                    montSeletorComboBox(filtro, "Teste", "teste", getTesteInsp(getConnection(), "Laboratório").toArray());
-                } else if (filtro.getNome().equals("Formato")) {
-                    montSeletorComboBox(filtro, "Formato", "formato", "A4", "A3");
-                } else if (filtro.getNome().equals("Entrada/Parada")) {
-                    montSeletorComboBox(filtro, "Flag", "flag", "E", "P");
-                } else if (filtro.getNome().equals("Tipo de teste")) {
-                    montSeletorComboBox(filtro, "Tipo de teste", "tipo", "Produção", "Re-Teste", "Try-out");
-                } else if (filtro.getNome().equals("Equipamento")) {
-                    montSeletorComboBox(filtro, "Equipamento", "equipamento", getEquipamento(getConnection()).toArray());
-                } else if (filtro.getNome().equals("Perfil")) {
-                    if (mapParam.get("linha") != null) {
-                        montSeletorComboBox(filtro, "Perfil", "perfil", getPerfil(getConnection(), mapParam.get("linha").toString()).toArray());
-                    } else {
-                        JOptionPane.showMessageDialog(form, "Selecione uma linha primeiro", "Erro de pesquisa", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                } else if (report.getNome().equals("DDZ rodada") && filtro.getNome().equals("Lançamentos")) {
-                    if (mapParam.get("dataini") != null && mapParam.get("datafim") != null && mapParam.get("perfil") != null) {
-                        montSeletorComboBox(filtro, "Lançamentos", "datetimeinput", getLancamentos(getConnection(),
-                                Datas.dateToTimestamp((Date) mapParam.get("dataini")),
-                                Datas.dateToTimestamp((Date) mapParam.get("datafim")),
-                                mapParam.get("perfil").toString()).toArray());
-                    } else {
-                        MessageFactory.getInfoMessage("Informe data e perfil!", form);
-                    }
-                }
-                break;
-            case "texto":
-                SeletorInputString seletor = (SeletorInputString) ControleInstancias.getInstance(SeletorInputString.class);
-                if (filtro.getNome().equals("Texto")) {
-                    seletor.setLabelText("Problema:");
-                }
-                seletor.getBtConfirmar().addActionListener(event -> {
-                    filtro.setValor(seletor.getItem());
-                    seletor.setVisible(true);
-                    if (filtro.getNome().equals("Texto")) {
-                        mapParam.put("obs", seletor.getItem());
-                    }
-                    seletor.dispose();
-                });
-                seletor.setVisible(true);
-                break;
-        }
+        final Report report = model_report.getObject(form.getTbRelatorio().getSelectedRow());
+        final ReportFilter reportFilter = model_filtros.getObject(form.getTbFiltro().getSelectedRow());
+        reportService.getSeletor(report, reportFilter);
     }
 
     private void imprimir() {
@@ -272,28 +167,6 @@ public final class Listener_ReportManager implements ActionListener {
         JasperUtil.imprimirSqlReport(conn, reportName, path, mapParam);
     }
 
-    private void montSeletorComboBox(Report_Filter filtro, String label, String key, Object... itens) {
-        SeletorSimpleComboBox seletorSimpleComboBox = (SeletorSimpleComboBox) ControleInstancias.getInstance(SeletorSimpleComboBox.class);
-        seletorSimpleComboBox.setLabelText(label);
-        seletorSimpleComboBox.carregarLista(Arrays.asList(itens));
-        seletorSimpleComboBox.getBtConfirmar().addActionListener(event -> {
-            Object ob = seletorSimpleComboBox.getSelectItem();
-            filtro.setValor(ob.toString());
-            if (filtro.getNome().equals("Perfil")) {
-                mapParam.put(key, ob.toString().split(" - ")[0]);
-            } else {
-                mapParam.put(key, ob);
-            }
-            model_filtros.fireTableDataChanged();
-            seletorSimpleComboBox.dispose();
-        });
-        seletorSimpleComboBox.getBtCancelar().addActionListener(event -> {
-            filtro.setValor(null);
-            mapParam.remove(key);
-        });
-        seletorSimpleComboBox.setVisible(true);
-    }
-
     private synchronized List<?> getResultadoListaValoresDB(List<?> resultado, String campo) {
         List<Object> valores = new ArrayList();
         for (Object item : resultado) {
@@ -310,90 +183,6 @@ public final class Listener_ReportManager implements ActionListener {
 
     private Connection getConnection() {
         return new ConexaoSql().getCon();
-    }
-
-    private List<String> getLinhas(Connection conn, String setor) {
-        List<String> lista = new ArrayList();
-        try {
-            ResultSet rs = getResultSet(conn, "Select LINHA from Cad_Linha where LINHA <> 'L01' and LINHA <> 'L03' and LINHA <> 'L03ATB' and LINHA <> 'L04ATB'"
-                    + "and LINHA <> 'L05' and LINHA <> 'L10' and LINHA <> 'L13' and LINHA <> 'L14' and LINHA <> 'L16' and LINHA <> 'Carrossel 37' and LINHA <> 'Carrossel 153' and LINHA <> 'Carrossel 197' and SETOR = ? ", setor);
-            while (rs.next()) {
-                lista.add(rs.getString(1));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return lista;
-    }
-
-    private List<String> getTesteInsp(Connection conn, String setor) {
-        List<String> lista = new ArrayList();
-        try {
-            ResultSet rs = getResultSet(conn, "SELECT DESC_TESTE FROM Cad_Teste where TES_EQUIPAMENTO=? ORDER BY ORDEM", setor);
-            while (rs.next()) {
-                lista.add(rs.getString(1));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return lista;
-    }
-
-    private List<String> getPerfil(Connection conn, String linha) {
-        List<String> lista = new ArrayList();
-        try {
-            ResultSet rs;
-            if (linha == null) {
-                rs = getResultSet(conn, "Select MATERIAL, BPCS from Cad_Material  order by BPCS ASC");
-            } else {
-                rs = getResultSet(conn, "Select MATERIAL, BPCS from Cad_Material where  MAT_LINHA= ? order by BPCS ASC", linha);
-            }
-            while (rs.next()) {
-                lista.add(rs.getString(1) + " - " + rs.getString(2));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return lista;
-    }
-
-    private List<String> getLancamentos(Connection conn, Timestamp dataInicial, Timestamp dataFinal, String rcPerfil) {
-        List<String> lista = new ArrayList();
-        try {
-            ResultSet rs = getResultSet(conn, "SELECT convert(varchar, data_hora_input, 120) as DATA_COMPLETA from dbo.VW_DDZ_DATAHORA WHERE (FLAG = 'E') AND convert(datetime,DATA_INPUT,103)BETWEEN  '" + dataInicial + "' and '" + dataFinal + "' AND ID_M_MATERIAL = '" + rcPerfil + "'");
-            while (rs.next()) {
-                lista.add(rs.getString(1));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return lista;
-    }
-
-    private List<String> getEquipamento(Connection conn) {
-        List<String> lista = new ArrayList();
-        try {
-            ResultSet rs = getResultSet(conn, "Select * from Cad_Equipamento order by EQUIPAMENTO ASC");
-            while (rs.next()) {
-                lista.add(rs.getString(1));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return lista;
-    }
-
-    private List<Long> getPermissoes(Connection conn, Integer usuario) {
-        List<Long> lista = new ArrayList();
-        try {
-            ResultSet rs = getResultSet(conn, "Select Relatorio from Cad_Relatorios_Permissoes where Usuario = ? ", usuario);
-            while (rs.next()) {
-                lista.add(rs.getLong(1));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return lista;
     }
 
     private ResultSet getResultSet(Connection conn, String sql, Object... parameters) {
