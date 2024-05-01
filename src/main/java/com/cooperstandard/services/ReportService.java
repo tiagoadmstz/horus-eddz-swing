@@ -163,7 +163,7 @@ public class ReportService {
     }
 
     private List<String> getLancamentos(Timestamp dataInicial, Timestamp dataFinal, String rcPerfil) {
-        return reportRestService.find(dataInicial, dataFinal, rcPerfil);
+        return reportRestService.findDdzByDateAndProfile(dataInicial, dataFinal, rcPerfil);
     }
 
     private List<String> getEquipamento() {

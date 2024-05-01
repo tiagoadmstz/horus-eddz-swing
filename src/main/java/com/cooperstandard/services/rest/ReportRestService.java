@@ -36,7 +36,15 @@ public class ReportRestService extends AbstractRestService {
 
     public List<String> findTestsByEquip(final String sector) {
         //"SELECT DESC_TESTE FROM Cad_Teste where TES_EQUIPAMENTO=? ORDER BY ORDEM"
-        return null;
+        final ResponseEntity<List<String>> response = restTemplate.exchange(
+                String.format("%s/reports/test/{sector}", BASE_URL),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<String>>() {
+                },
+                sector
+        );
+        return response.getBody();
     }
 
     public List<String> findMaterialByLine(final String line) {
@@ -47,21 +55,52 @@ public class ReportRestService extends AbstractRestService {
                 rs = getResultSet(conn, "Select MATERIAL, BPCS from Cad_Material where  MAT_LINHA= ? order by BPCS ASC", line);
             }
          */
-        return null;
+        final ResponseEntity<List<String>> response = restTemplate.exchange(
+                String.format("%s/reports/material/{line}", BASE_URL),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<String>>() {
+                },
+                line
+        );
+        return response.getBody();
     }
 
-    public List<String> find(final Timestamp dataInicial, final Timestamp dataFinal, final String rcPerfil) {
+    public List<String> findDdzByDateAndProfile(final Timestamp dataInicial, final Timestamp dataFinal, final String rcPerfil) {
         //"SELECT convert(varchar, data_hora_input, 120) as DATA_COMPLETA from dbo.VW_DDZ_DATAHORA WHERE (FLAG = 'E') AND convert(datetime,DATA_INPUT,103)BETWEEN  '" + dataInicial + "' and '" + dataFinal + "' AND ID_M_MATERIAL = '" + rcPerfil + "'"
-        return null;
+        final ResponseEntity<List<String>> response = restTemplate.exchange(
+                String.format("%s/reports/ddz/list?{dataInicial}&{dataFinal}&{rcPerfil}", BASE_URL),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<String>>() {
+                },
+                dataInicial, dataFinal, rcPerfil
+        );
+        return response.getBody();
     }
 
     public List<String> findAllEquip() {
         //"Select * from Cad_Equipamento order by EQUIPAMENTO ASC"
-        return null;
+        final ResponseEntity<List<String>> response = restTemplate.exchange(
+                String.format("%s/reports/equip/list", BASE_URL),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<String>>() {
+                }
+        );
+        return response.getBody();
     }
 
     public List<Long> findReportPermissionsByUserId(final Integer userId) {
         //"Select Relatorio from Cad_Relatorios_Permissoes where Usuario = ? "
-        return null;
+        final ResponseEntity<List<Long>> response = restTemplate.exchange(
+                String.format("%s/reports/permission/{userId}", BASE_URL),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Long>>() {
+                },
+                userId
+        );
+        return response.getBody();
     }
 }
