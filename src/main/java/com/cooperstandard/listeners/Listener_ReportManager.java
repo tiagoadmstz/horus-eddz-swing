@@ -49,17 +49,20 @@ import java.util.stream.Collectors;
 public final class Listener_ReportManager implements ActionListener {
 
     private final ViewRelatorio form;
-    private TableModel_ReportGroup model_group;
-    private TableModel_Report model_report;
-    private TableModel_Filtros model_filtros;
+    private final TableModel_ReportGroup model_group;
+    private final TableModel_Report model_report;
+    private final TableModel_Filtros model_filtros;
     private List<Report> reports;
     private List<ReportGroup> groups;
-    private final Map<String, Object> mapParam = new HashMap();
+    private final Map<String, Object> mapParam = new HashMap<>(1);
     private EntityManagerHelper emh;
     private final ReportService reportService;
 
     public Listener_ReportManager(ViewRelatorio form) {
         this.form = form;
+        this.model_group = new TableModel_ReportGroup();
+        this.model_report = new TableModel_Report();
+        this.model_filtros = new TableModel_Filtros();
         this.reportService = new ReportService(form, mapParam, model_filtros);
         initComponents();
     }
@@ -103,12 +106,9 @@ public final class Listener_ReportManager implements ActionListener {
     }
 
     public void addModel() {
-        model_group = new TableModel_ReportGroup();
         model_group.setLista(groups);
         form.getTbGrupo().setModel(model_group);
-        model_filtros = new TableModel_Filtros();
         form.getTbFiltro().setModel(model_filtros);
-        model_report = new TableModel_Report();
         form.getTbRelatorio().setModel(model_report);
     }
 
