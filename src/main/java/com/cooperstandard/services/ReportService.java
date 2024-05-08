@@ -10,6 +10,7 @@ import com.cooperstandard.frames.seletores.SeletorDatas;
 import com.cooperstandard.frames.seletores.SeletorHorario;
 import com.cooperstandard.frames.seletores.SeletorInputString;
 import com.cooperstandard.frames.seletores.SeletorSimpleComboBox;
+import com.cooperstandard.services.dtos.ReportGenerationDto;
 import com.cooperstandard.services.rest.ReportRestService;
 import com.cooperstandard.tables.TableModel_Filtros;
 import com.cooperstandard.views.principal.ViewRelatorio;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ReportService {
 
@@ -134,11 +136,13 @@ public class ReportService {
         seletorSimpleComboBox.carregarLista(Arrays.asList(itens));
         seletorSimpleComboBox.getBtConfirmar().addActionListener(event -> {
             Object ob = seletorSimpleComboBox.getSelectItem();
-            filtro.setValor(ob.toString());
-            if (filtro.getNome().equals("Perfil")) {
-                mapParam.put(key, ob.toString().split(" - ")[0]);
-            } else {
-                mapParam.put(key, ob);
+            if (Objects.nonNull(ob)) {
+                filtro.setValor(ob.toString());
+                if (filtro.getNome().equals("Perfil")) {
+                    mapParam.put(key, ob.toString().split(" - ")[0]);
+                } else {
+                    mapParam.put(key, ob);
+                }
             }
             filtersTableModel.fireTableDataChanged();
             seletorSimpleComboBox.dispose();
@@ -172,5 +176,9 @@ public class ReportService {
 
     private List<Long> getPermissoes(final Integer userId) {
         return reportRestService.findReportPermissionsByUserId(userId);
+    }
+
+    public void print(ReportGenerationDto reportGenerationDto) {
+        reportRestService.generateReport(reportGenerationDto);
     }
 }

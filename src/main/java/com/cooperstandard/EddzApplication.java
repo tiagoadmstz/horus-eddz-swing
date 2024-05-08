@@ -16,7 +16,7 @@ public class EddzApplication {
 
     void start() {
         changeLoolAndFeel();
-        runMigrations();
+        //runMigrations();
         new ViewLogin().setVisible(true);
     }
 
