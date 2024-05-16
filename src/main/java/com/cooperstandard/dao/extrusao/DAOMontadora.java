@@ -22,7 +22,7 @@ public class DAOMontadora extends ConexaoSql {
                     "INSERT INTO Cad_Oem ("
                     + "OEM"
                     + ") VALUES ("
-                    + "'" + pModelMontadora.getOem() + "'"
+                    + "'" + pModelMontadora.getOemDescription() + "'"
                     + ");"
             );
 
@@ -50,8 +50,8 @@ public class DAOMontadora extends ConexaoSql {
                     + ";"
             );
             while (this.getResultSet().next()) {
-                modelMontadora.setId_oem(this.getResultSet().getInt(1));
-                modelMontadora.setOem(this.getResultSet().getString(2));
+                modelMontadora.setId(this.getResultSet().getInt(1));
+                modelMontadora.setOemDescription(this.getResultSet().getString(2));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,8 +76,8 @@ public class DAOMontadora extends ConexaoSql {
                     + ";"
             );
             while (this.getResultSet().next()) {
-                modelMontadora.setId_oem(this.getResultSet().getInt(1));
-                modelMontadora.setOem(this.getResultSet().getString(2));
+                modelMontadora.setId(this.getResultSet().getInt(1));
+                modelMontadora.setOemDescription(this.getResultSet().getString(2));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,8 +103,8 @@ public class DAOMontadora extends ConexaoSql {
 
             while (this.getResultSet().next()) {
                 modelMontadora = new ModelMontadora();
-                modelMontadora.setId_oem(this.getResultSet().getInt(1));
-                modelMontadora.setOem(this.getResultSet().getString(2));
+                modelMontadora.setId(this.getResultSet().getInt(1));
+                modelMontadora.setOemDescription(this.getResultSet().getString(2));
                 listaMontadoras.add(modelMontadora);
             }
 
@@ -122,9 +122,9 @@ public class DAOMontadora extends ConexaoSql {
             this.conectar();
             this.executarUpdateDeleteSQL(
                     "UPDATE Cad_Oem SET "
-                    + "OEM = '" + pModelMontadora.getOem() + "'"
+                    + "OEM = '" + pModelMontadora.getOemDescription() + "'"
                     + " WHERE "
-                    + "ID_OEM = '" + pModelMontadora.getId_oem() + "'"
+                    + "ID_OEM = '" + pModelMontadora.getId() + "'"
                     + ";"
             );
             return true;

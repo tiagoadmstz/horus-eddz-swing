@@ -370,7 +370,7 @@ public class ViewProjeto extends javax.swing.JFrame {
         listaModelMontadora = controllerMontadora.getListaMontadoraController();
         cbMontadora.removeAllItems();
         for (int i = 0; i < listaModelMontadora.size(); i++) {
-            cbMontadora.addItem(listaModelMontadora.get(i).getOem());
+            cbMontadora.addItem(listaModelMontadora.get(i).getOemDescription());
         }
     }
 

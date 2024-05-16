@@ -5,35 +5,21 @@
  */
 package com.cooperstandard.model;
 
-/**
- *
- * @author rsouza10
- */
-public class ModelMontadora {
-    private String oem;
-    private int id_oem;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public String getOem() {
-        return oem;
-    }
+import java.io.Serializable;
 
-    public void setOem(String oem) {
-        this.oem = oem;
-    }
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ModelMontadora implements Serializable {
 
-    public int getId_oem() {
-        return id_oem;
-    }
+    @JsonProperty("id")
+    private int id;
+    @JsonProperty("description")
+    private String oemDescription;
 
-    public void setId_oem(int id_oem) {
-        this.id_oem = id_oem;
-    }
-
-    @Override
-    public String toString() {
-        return "ModelMontadora{" + "oem=" + oem + ", id_oem=" + id_oem + '}';
-    }
-    
-    
-    
 }
