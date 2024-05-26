@@ -14,6 +14,7 @@ import com.cooperstandard.services.dtos.ReportGenerationDto;
 import com.cooperstandard.services.rest.ReportRestService;
 import com.cooperstandard.tables.TableModel_Filtros;
 import com.cooperstandard.views.principal.ViewRelatorio;
+import net.sf.jasperreports.engine.JasperPrint;
 
 import javax.swing.*;
 import java.sql.Timestamp;
@@ -166,8 +167,8 @@ public class ReportService {
         return reportRestService.findMaterialByLine(line);
     }
 
-    private List<String> getLancamentos(Timestamp dataInicial, Timestamp dataFinal, String rcPerfil) {
-        return reportRestService.findDdzByDateAndProfile(dataInicial, dataFinal, rcPerfil);
+    private List<String> getLancamentos(final Timestamp initialDate, final Timestamp finalDate, final String rcProfile) {
+        return reportRestService.findDdzByDateAndProfile(initialDate, finalDate, rcProfile);
     }
 
     private List<String> getEquipamento() {
@@ -178,7 +179,7 @@ public class ReportService {
         return reportRestService.findReportPermissionsByUserId(userId);
     }
 
-    public void print(ReportGenerationDto reportGenerationDto) {
-        reportRestService.generateReport(reportGenerationDto);
+    public JasperPrint print(final ReportGenerationDto reportGenerationDto) {
+        return reportRestService.generateReport(reportGenerationDto);
     }
 }

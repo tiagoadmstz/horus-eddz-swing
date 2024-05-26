@@ -6,7 +6,7 @@ import com.cooperstandard.enumerated.LOOKANDFEEL;
 import com.cooperstandard.views.principal.ViewLogin;
 import org.flywaydb.core.Flyway;
 
-import javax.swing.*;
+import javax.swing.UIManager;
 
 public class EddzApplication {
 

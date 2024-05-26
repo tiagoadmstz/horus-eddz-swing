@@ -10,12 +10,21 @@ import com.cooperstandard.tables.TableModel_Filtros;
 import com.cooperstandard.tables.TableModel_Report;
 import com.cooperstandard.tables.TableModel_ReportGroup;
 import com.cooperstandard.views.principal.ViewRelatorio;
+import net.sf.jasperreports.view.JRViewer;
+import net.sf.jasperreports.view.JasperViewer;
 
-import java.awt.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import java.awt.Cursor;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -98,10 +107,34 @@ public final class ListenerReportManager implements ActionListener {
             form.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             final Report report = modelReport.getObject(form.getTbRelatorio().getSelectedRow());
             final ReportGenerationDto reportGenerationDto = new ReportGenerationDto(report);
-            //TODO: change to view PDF file
-            reportService.print(reportGenerationDto);
+            JasperViewer view = new JasperViewer(reportService.print(reportGenerationDto), false);
+            configureJasperViewer(view);
+            view.setVisible(true);
         }
         form.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
+
+    private void configureJasperViewer(JasperViewer view) {
+        view.setTitle("");
+        view.setExtendedState(Frame.MAXIMIZED_BOTH);
+        JRViewer viewer = (JRViewer) ((JPanel) view.getContentPane().getComponents()[0]).getComponents()[0];
+        configurePrintShortcut(viewer);
+    }
+
+    private void configurePrintShortcut(JRViewer viewer) {
+        Arrays.stream(viewer.getComponents())
+                .filter(JPanel.class::isInstance)
+                .map(JPanel.class::cast)
+                .forEach(panel -> Arrays.stream(panel.getComponents())
+                        .filter(JButton.class::isInstance)
+                        .map(JButton.class::cast)
+                        .filter(button -> ((ImageIcon) button.getIcon()).getDescription().contains("print.GIF"))
+                        .forEach(button -> viewer.registerKeyboardAction(
+                                event -> button.doClick(),
+                                KeyStroke.getKeyStroke(KeyEvent.VK_P, KeyEvent.CTRL_DOWN_MASK),
+                                JRViewer.WHEN_IN_FOCUSED_WINDOW
+                        ))
+                );
     }
 
     private void getSelector() {

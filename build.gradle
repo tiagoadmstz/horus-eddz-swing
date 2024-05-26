@@ -71,6 +71,7 @@ dependencies {
     implementation 'org.yaml:snakeyaml'
     //utils
     implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'commons-io:commons-io:2.16.1'
     //files
     implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/commons-javaflow-20060411.jar')
     implementation files('/home/tdteixeira/DEV/personal/cooperstandard-zero/EDDZ/src/main/resources/lib/commons-report-1.8.2.jar')
