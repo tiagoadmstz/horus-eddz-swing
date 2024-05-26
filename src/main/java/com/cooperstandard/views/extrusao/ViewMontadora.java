@@ -388,15 +388,13 @@ public class ViewMontadora extends javax.swing.JFrame {
 
     private void carregaMontadora() {
         listaModelMontadora = assemblerService.getListaMontadoraController();
-        DefaultTableModel modelo = (DefaultTableModel) tbOem.getModel();
+        final DefaultTableModel modelo = (DefaultTableModel) tbOem.getModel();
         modelo.setNumRows(0);
-        int cont = listaModelMontadora.size();
-        for (int i = 0; i < cont; i++) {
+        for (final ModelMontadora assemblerModel : listaModelMontadora) {
             modelo.addRow(new Object[]{
-                    listaModelMontadora.get(i).getId(),
-                    listaModelMontadora.get(i).getOemDescription()
+                    assemblerModel.getId(),
+                    assemblerModel.getOemDescription()
             });
-
         }
     }
 

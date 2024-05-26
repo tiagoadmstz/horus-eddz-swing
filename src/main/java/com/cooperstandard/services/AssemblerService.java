@@ -14,24 +14,28 @@ public class AssemblerService {
         this.assemblerRestService = new AssemblerRestService();
     }
 
-    public boolean save(ModelMontadora modelMontadora) {
+    public List<ModelMontadora> list() {
+        return assemblerRestService.list();
+    }
+
+    public boolean save(final ModelMontadora modelMontadora) {
         final ModelMontadora saved = assemblerRestService.save(modelMontadora);
         return Objects.nonNull(saved.getId());
     }
 
-    public boolean excluirMontadoraController(int codigo) {
-        return false;
+    public boolean excluirMontadoraController(final int codigo) {
+        return assemblerRestService.delete(codigo);
     }
 
-    public ModelMontadora getMontadoraController(int codigo) {
-        return null;
+    public ModelMontadora getMontadoraController(final int codigo) {
+        return assemblerRestService.findById(codigo);
     }
 
-    public boolean atualizarMontadoraController(ModelMontadora modelMontadora) {
-        return false;
+    public boolean atualizarMontadoraController(final ModelMontadora modelMontadora) {
+        return save(modelMontadora);
     }
 
     public List<ModelMontadora> getListaMontadoraController() {
-        return null;
+        return assemblerRestService.list();
     }
 }
