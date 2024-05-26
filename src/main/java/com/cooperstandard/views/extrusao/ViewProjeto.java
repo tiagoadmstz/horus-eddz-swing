@@ -5,14 +5,15 @@
  */
 package com.cooperstandard.views.extrusao;
 
+import com.cooperstandard.services.AssemblerService;
 import com.cooperstandard.util.EstiloTablaRenderer;
-import com.cooperstandard.controller.extrusao.ControllerMontadora;
 import com.cooperstandard.controller.extrusao.ControllerProjeto;
 import com.cooperstandard.model.ModelMontadora;
 import com.cooperstandard.model.ModelProjeto;
 import com.cooperstandard.util.ControleInstancias;
 import com.cooperstandard.util.HeaderRenderer;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -24,10 +25,10 @@ import javax.swing.table.DefaultTableModel;
 public class ViewProjeto extends javax.swing.JFrame {
 
     ModelProjeto modelProjeto = new ModelProjeto();
-    ControllerProjeto controllerProjeto = new ControllerProjeto();
-    ArrayList<ModelProjeto> listaModelProjeto = new ArrayList<ModelProjeto>();
-    ControllerMontadora controllerMontadora = new ControllerMontadora();
-    ArrayList<ModelMontadora> listaModelMontadora = new ArrayList<ModelMontadora>();
+    final ControllerProjeto controllerProjeto = new ControllerProjeto();
+    List<ModelProjeto> listaModelProjeto = new ArrayList<>(1);
+    final AssemblerService assemblerService = new AssemblerService();
+    List<ModelMontadora> listaModelMontadora = new ArrayList<>(1);
 
     String tipoCadastro;
     private JFrame solicitante = null;
@@ -367,10 +368,10 @@ public class ViewProjeto extends javax.swing.JFrame {
     }
 
     private void listarMontadora() {
-        listaModelMontadora = controllerMontadora.getListaMontadoraController();
+        listaModelMontadora = assemblerService.getListaMontadoraController();
         cbMontadora.removeAllItems();
-        for (int i = 0; i < listaModelMontadora.size(); i++) {
-            cbMontadora.addItem(listaModelMontadora.get(i).getOemDescription());
+        for (ModelMontadora modelMontadora : listaModelMontadora) {
+            cbMontadora.addItem(modelMontadora.getOemDescription());
         }
     }
 
